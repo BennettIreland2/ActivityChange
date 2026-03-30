@@ -21,11 +21,16 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun WelcomePage(username: String) {
+fun WelcomePage(username: String,
+                phone: String,
+                email: String,
+                address: String) {
     val context = LocalContext.current
-    var phoneNumber by remember { mutableStateOf("") }
-    var emailAddress by remember { mutableStateOf("") }
-    var homeAddress by remember { mutableStateOf("") }
+
+    // Add keys so state updates if the inputs change
+    var phoneNumber by remember(phone) { mutableStateOf(phone) }
+    var emailAddress by remember(email) { mutableStateOf(email) }
+    var streetAddress by remember(address) { mutableStateOf(address) }
 
     Column(modifier = Modifier
         .fillMaxSize()
@@ -72,14 +77,14 @@ fun WelcomePage(username: String) {
 
         // Home address
         TextField(
-            value = homeAddress,
-            onValueChange = { homeAddress = it },
+            value = streetAddress,
+            onValueChange = { streetAddress = it },
             label = { Text("Home Address") },
             modifier = Modifier.fillMaxWidth()
         )
         Button(onClick = {
             val intent = Intent(Intent.ACTION_VIEW)
-            intent.data = Uri.parse("geo:0,0?q=${Uri.encode(homeAddress)}")
+            intent.data = Uri.parse("geo:0,0?q=${Uri.encode(streetAddress)}")
             context.startActivity(intent)
         }) {
             Text("Open Map")
